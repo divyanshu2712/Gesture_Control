@@ -28,12 +28,12 @@ volume = interface.QueryInterface(IAudioEndpointVolume)
 
 def volume_control(value):
     vol_value=np.interp(value,[30,210],[-65.25,0])
-    print(value,vol_value)
+    # print(value,vol_value)
     volume.SetMasterVolumeLevel(vol_value, None)
 
 def brightness_control(value):
     new_brightness=np.interp(value,[30,210],[0,100])
-    print(value,new_brightness)
+    # print(value,new_brightness)
     set_brightness(new_brightness)
 
 def shutdown(value):

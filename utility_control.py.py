@@ -39,6 +39,7 @@ def brightness_control(value):
 def shutdown(value):
     if value<25:
         os.system("shutdown /s /t 1")
+        # print("Shutdown")
 
 while True:
     success,img=cap.read()
@@ -48,7 +49,7 @@ while True:
         hand1=hands[0]
         if hand1['type']=="Left":
             opt=detector.fingersUp(hand1).count(1)-1
-            print(opt)
+            # print(opt)
         if hand1['type']=="Right":
             lm_list=hand1['lmList']
             if opt==1:

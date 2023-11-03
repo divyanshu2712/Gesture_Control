@@ -1,15 +1,18 @@
 import cv2
-import mediapipe as mp
+# import mediapipe as mp
 from gccs import HandDetector
 import time
 import numpy as np
 import pyautogui
 ###################################################
 wcam=640
-rf=100 #reduced frame
+rf=110 #reduced frame
 hcam=480
 wscreen,hscreen=pyautogui.size()
 pyautogui.FAILSAFE=False
+smoothing=2
+plocX,plocY=0,0
+clocX,clocY=0,0
 ###################################################
 cap=cv2.VideoCapture(0)
 cap.set(3,wcam)
@@ -37,29 +40,29 @@ while True:
                 #Convert coordinates
                 x3=np.interp(x1,(rf,wcam-rf),(0,wscreen))
                 y3=np.interp(y1,(rf,hcam-rf),(0,hscreen))
+                clocX=plocX+(x3-plocX)/smoothing
+                clocY=plocY+(y3-plocY)/smoothing
                 cv2.circle(img,(x1,y1),15,(144, 238, 144),cv2.FILLED)
-                pyautogui.moveTo(x3,y3)
+                pyautogui.moveTo(clocX,clocY)
+                plocX,plocY=clocX,clocY
             #Clicking Mode
-            if fingers_up[1]==1 and fingers_up[2]==1:
-                #index finger
-                x1,y1=lm_list[8][:2]
-                #middle finger
-                x2,y2=lm_list[12][:2]
-                length,info,img=detector.findDistance((x1,y1),(x2,y2),img,color=(144,238,144),scale=10)
-                # cv2.circle(img,(x1,y1),15,(144, 238, 144),cv2.FILLED)
-                # cv2.circle(img,(x2,y2),15,(144, 238, 144),cv2.FILLED)
-                # print(length)            
-                if length<30:
-                    cv2.circle(img,(info[-2],info[-1]),15,(144, 238, 144),cv2.FILLED)
-                    pyautogui.leftClick()
-                    
-    
-    
-    
-    
-    
-    
-    
+            x1,y1=lm_list[8][:2]
+            x2,y2=lm_list[12][:2]
+            length,info,img=detector.findDistance((x1,y1),(x2,y2),img,color=(144,238,144),scale=10,draw=False)
+            if fingers_up[1]==1 and fingers_up[2]==1 and length<40 and fingers_up[4]==0:
+                # If index and middle finger up then left click also there dist is less
+                pyautogui.leftClick()
+                x3,y3=lm_list[16][:2]
+                length,info,img=detector.findDistance((x2,y2),(x3,y3),img,color=(144,238,144),scale=10,draw=False)
+                if fingers_up[3]==1 and length<40:
+                    # If index and middle,ring finger up then right click also there dist is less
+                    pyautogui.rightClick()
+            if fingers_up[1]==1 and fingers_up[2]==1 and fingers_up[3]==1 and fingers_up[4]==1:
+                pyautogui.scroll(-200)
+        else:
+            fingers_up=detector.fingersUp(hand1)
+            if fingers_up[1]==1 and fingers_up[2]==1 and fingers_up[3]==1 and fingers_up[4]==1:
+                pyautogui.scroll(200)
     #Frame Rate
     ctime=time.time()
     fps=1/(ctime-ptime)

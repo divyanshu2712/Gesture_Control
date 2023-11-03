@@ -65,6 +65,7 @@ class HandDetector:
                 ymin, ymax = min(yList), max(yList)
                 boxW, boxH = xmax - xmin, ymax - ymin
                 bbox = xmin, ymin, boxW, boxH
+                # print(type(bbox))
                 cx, cy = bbox[0] + (bbox[2] // 2), \
                          bbox[1] + (bbox[3] // 2)
 
@@ -124,7 +125,7 @@ class HandDetector:
                     fingers.append(0)
         return fingers
 
-    def findDistance(self, p1, p2, img=None, color=(255, 0, 255), scale=5):
+    def findDistance(self, p1, p2, img=None, color=(255, 0, 255), scale=5,draw=True):
         """
         Find the distance between two landmarks input should be (x1,y1) (x2,y2)
         :param p1: Point1 (x1,y1)
@@ -141,10 +142,11 @@ class HandDetector:
         length = math.hypot(x2 - x1, y2 - y1)
         info = (x1, y1, x2, y2, cx, cy)
         if img is not None:
-            cv2.circle(img, (x1, y1), scale, color, cv2.FILLED)
-            cv2.circle(img, (x2, y2), scale, color, cv2.FILLED)
-            cv2.line(img, (x1, y1), (x2, y2), color, max(1, scale // 3))
-            cv2.circle(img, (cx, cy), scale, color, cv2.FILLED)
+            if draw:
+                cv2.circle(img, (x1, y1), scale, color, cv2.FILLED)
+                cv2.circle(img, (x2, y2), scale, color, cv2.FILLED)
+                cv2.line(img, (x1, y1), (x2, y2), color, max(1, scale // 3))
+                cv2.circle(img, (cx, cy), scale, color, cv2.FILLED)
 
         return length, info, img
 

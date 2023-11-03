@@ -51,7 +51,7 @@ def shutdown(value):
     @param:
     value: It is a distance between finger passed to it. 
     '''
-    if value<25:
+    if value<30:
         # os.system("shutdown /s /t 1")
         print("Shutdown")
 

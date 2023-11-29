@@ -28,7 +28,6 @@ cap.set(3,1280)
 cap.set(4,720)
 detector=HandDetector(detectionCon=0.85)
 while True:
-    mask=np.zeros_like(img)
     success,img=cap.read()
     #Placing Header Image
     img=cv2.flip(img,1)
@@ -45,7 +44,6 @@ while True:
         x2,y2=lmlist[12][:2]
 
         fingers=detector.fingersUp(hand)
-        cv2.circle(mask,(x1,y1),100,(255,255,255),-1)
         if fingers[1] and fingers[2]:
             #Checking for click
             xp,yp=x1,y1
@@ -77,9 +75,7 @@ while True:
             else:    
                 cv2.line(img,(xp,yp),(x1,y1),drawColor,thick)
                 cv2.line(Canvas,(xp,yp),(x1,y1),drawColor,thick)
-            xp,yp=x1,y1
     cv2.imshow("Image",img)
-    Canvas=cv2.addWeighted(Canvas,0.5,mask,0.5,0)
     cv2.imshow("Canvas",Canvas)
     if cv2.waitKey(1)==27:
         break

@@ -59,7 +59,7 @@ while True:
                     x2,y2=lm_list[12][:2]
                     length,info,img=detector.findDistance((x1,y1),(x2,y2),img,color=(144,238,144),scale=10)
                     if length<35:
-                    # If index and middle,ring finger up then right click also there dist is less
+                    # If index and middle finger up then left click also there dist is less
                         if fingers_up[0]==1:
                             pyautogui.click(button='left')
                         # If Dragging False then make it true and press left button with thumb open 

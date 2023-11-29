@@ -1,0 +1,6 @@
+It will have
+* New page function
+* Can add shapes
+* can change thickness of image
+* can record video
+* can get pdf of the pages

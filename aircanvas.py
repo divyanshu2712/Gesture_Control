@@ -30,29 +30,15 @@ next=1
 ########################
 ########################
 img_folder="aircanvastop"
-right_folder="aircanvasright"
-left_folder="aircanvasleft"
 mylist=os.listdir(img_folder)
-rightside=os.listdir(right_folder)
-leftside=os.listdir(left_folder)
-overlayright=[]
-overlayleft=[]
 overlaytop=[]
+overlayright=cv2.imread("aircanvasright/1.png")
 for impath in mylist:
     image=cv2.imread(f"{img_folder}/{impath}")
     overlaytop.append(image)
 
-for impath in rightside:
-    image=cv2.imread(f"{right_folder}/{impath}")
-    overlayright.append(image)
-
-for impath in leftside:
-    image=cv2.imread(f"{left_folder}/{impath}")
-    overlayleft.append(image)
-
 header=overlaytop[0]
-right=overlayright[0]
-left=overlayleft[0]
+right=overlayright
 cap=cv2.VideoCapture(0)
 cap.set(3,1280)
 cap.set(4,720)
@@ -63,25 +49,24 @@ while True:
     success,img=cap.read()
     #Placing Header Image
     img=cv2.flip(img,1)
-    img[0:127,0:1280]=header
     Canvas[0:127,0:1280]=header
     Canvas[127:720,1208:1280]=right
-    Canvas[127:720,0:72]=left
     #Finding hands
     cv2.circle(Canvas,(1220,50),thickness,(0,117,252),cv2.FILLED)
     cv2.putText(Canvas,f"Thickness",(1185,95),cv2.FONT_HERSHEY_PLAIN,1,(255,255,255),1)
     hands,img=detector.findHands(img,flipType=False,draw=False)
     Canvas_Copy=Canvas.copy()
-
-    thickness=thick*5
-    erase_thick=thickness*10
+    if thick<1:
+        thickness=2
+        erase_thick=5
+    else:
+        thickness=thick*5
+        erase_thick=thickness*10
 
     if len(hands)==1:
         hand=hands[0]
         if hand['type']=='Left':
             thick=detector.fingersUp(hand)[1:].count(1)
-            if thick==0:
-                thick=1
         if hand['type']=="Right":
             lmlist=hand['lmList']
             # print(lmlist)
@@ -96,23 +81,19 @@ while True:
                     if 200<x1<400:
                         header=overlaytop[0]
                         drawColor=(0,0,255)
-                        right=overlayright[0]
-                        left=overlayleft[0]
+                        right=overlayright
                     elif 450<x1<600:
                         header=overlaytop[1]
                         drawColor=(255,0,0)
-                        right=overlayright[0]
-                        left=overlayleft[0]
+                        right=overlayright
                     elif 650<x1<800:
                         header=overlaytop[2]
                         drawColor=(0,255,0)
-                        right=overlayright[0]
-                        left=overlayleft[0]
+                        right=overlayright
                     elif 850<x1<1000:
                         header=overlaytop[3]
                         drawColor=(255,255,255)
-                        right=overlayright[0]
-                        left=overlayleft[0]
+                        right=overlayright
                     elif 1050<x1<1200:
                         #New Page Logic and Saving Previous
                         if time.time() - last_save_time >= save_interval:
@@ -128,26 +109,42 @@ while True:
                         Canvas=np.full((720,1280,3),255,np.uint8)
                         Canvas[0:127,0:1280]=header
                         Canvas[127:720,1208:1280]=right
-                        Canvas[127:720,0:72]=left
                         cv2.circle(Canvas,(1220,50),thickness,(0,117,252),cv2.FILLED)
                         cv2.putText(Canvas,f"Thickness",(1185,95),cv2.FONT_HERSHEY_PLAIN,1,(255,255,255),1)
                 elif x1>1208:
-                    if 130<y1<200:
+                    if 130<y1<250:
+                        #NextPage
+                        # print("Next")
+                        ll=os.listdir("output")
+                        if time.time() - last_next_time >= next_interval:
+                            last_next_time = time.time()
+                            print(next)
+                            if next!=num:
+                                Canvas=cv2.imread(f"output/{next}.png")
+                            if next==1:
+                                prev=1
+                            elif next==num:
+                                prev=next-1
+                            else:
+                                next=next+1
+                                prev=prev+1
+                    elif 260<y1<350:
                         #Previous Logic
+                        # print("Previous")
                         if time.time() - last_prev_time >= prev_interval:
                             last_prev_time = time.time()
                             if (prev+1)==num:
                                 cv2.imwrite(f"output/{num}.png",Canvas)
                                 num=num+1
-                            else:
-                                next=prev+1
+                            next=prev+1
                             print(prev)
                             if os.listdir("output")!=[]:
                                 Canvas=cv2.imread(f"output/{prev}.png")
                             if prev>1:
                                 prev=prev-1
-                    elif 230<y1<300:
+                    elif 358<y1<480:
                         #Download
+                        # print("Download")
                         if time.time() - last_download_time >= download_interval:
                             last_download_time = time.time()
                             img_dir = 'output'
@@ -163,27 +160,6 @@ while True:
                                 notification_timeout = 10  # Notification display time in seconds
                                 icon_path = "logo/icon.ico"
                                 notification.notify( title=notification_title, message=notification_text, timeout=notification_timeout, app_icon=icon_path)
-                    elif 330<y1<400:
-                        #Rectangle
-                        right=overlayright[1]
-                elif x1<72:
-                    if 130<y1<200:
-                        #NextPage
-                        if time.time() - last_next_time >= next_interval:
-                            last_next_time = time.time()
-                            if next!=num:
-                                Canvas=cv2.imread(f"output/{next}.png")
-                            if next==num:
-                                prev=next-1
-                            else:
-                                next=next+1
-                                prev=prev+1
-                    elif 230<y1<300:
-                        #Line
-                        left=overlayleft[1]
-                    elif 330<y1<400:
-                        #Circle
-                        left=overlayleft[2]
             if fingers[1]==1 and fingers[2]==0 and fingers[1:].count(1)==1:
                 cv2.circle(img,(x1,y1),15,drawColor,cv2.FILLED)
                 if xp==0 and yp==0:
@@ -191,16 +167,18 @@ while True:
                 #drawing
                 #special condition for eraser
                 if drawColor==(255,255,255):
-                    cv2.line(img,(xp,yp),(x1,y1),drawColor,erase_thick)
                     cv2.line(Canvas,(xp,yp),(x1,y1),drawColor,erase_thick)
                 else:    
-                    cv2.line(img,(xp,yp),(x1,y1),drawColor,thickness)
-                    cv2.line(Canvas,(xp,yp),(x1,y1),drawColor,thickness)
+                    cv2.line(Canvas,(xp,yp),(x1,y1),drawColor,thickness+5)
                 xp,yp=x1,y1
             Canvas_Copy=Canvas.copy()
-            cv2.circle(Canvas_Copy,(x1,y1),12,(15,10,20),cv2.FILLED)
+            if drawColor==(255,255,255):
+                cv2.circle(Canvas_Copy,(x1,y1),thickness,(15,10,20),cv2.FILLED)
+            else:
+                cv2.circle(Canvas_Copy,(x1,y1),thickness,(15,10,20),cv2.FILLED)
                     
     cv2.imshow("Canvas",Canvas_Copy)
     if cv2.waitKey(1)==27:
         break
 cv2.destroyAllWindows()
+cap.release()

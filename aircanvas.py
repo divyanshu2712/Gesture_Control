@@ -25,7 +25,7 @@ xp=0
 yp=0
 Canvas=np.full((720,1280,3),255,np.uint8)# its format is height,width, channel, dtype=unsigned int(0-255)
 num=1
-prev=1
+prev=-1
 next=1
 ########################
 ########################
@@ -122,7 +122,7 @@ while True:
                             if next!=num:
                                 Canvas=cv2.imread(f"output/{next}.png")
                             if next==1:
-                                prev=1
+                                prev=-1
                             elif next==num:
                                 prev=next-1
                             else:
@@ -136,7 +136,8 @@ while True:
                             if (prev+1)==num:
                                 cv2.imwrite(f"output/{num}.png",Canvas)
                                 num=num+1
-                            next=prev+1
+                            if prev!=-1:
+                                next=prev+1
                             print(prev)
                             if os.listdir("output")!=[]:
                                 Canvas=cv2.imread(f"output/{prev}.png")

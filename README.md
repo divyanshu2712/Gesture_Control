@@ -25,3 +25,14 @@ There are three options in it which is informed by left hand while we control th
 ![3 Image](/images/3.jpeg)
 
 3. Power Control: It is to be done carefully as it leads to shutdown your PC and is signified by 3.
+
+## Moving in GCCS System
+
+1. No finger up by left and right hand signify exit from that module
+
+2. 1 shown by both means open utility module
+
+3. 2 shown by both means open Mouse Control module
+
+4. 3 shown by both means open Air Canvas module
+

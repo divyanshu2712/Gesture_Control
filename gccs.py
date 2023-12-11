@@ -132,8 +132,8 @@ class HandDetector:
         :param p2: Point2 (x2,y2)
         :param img: Image to draw output on. If no image input output img is None
         :return: Distance between the points
-                 Image with output drawn
                  Line information
+                 Image with output drawn
         """
 
         x1, y1 = p1

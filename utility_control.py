@@ -125,7 +125,6 @@ def Utility_Control(acquire=False):
                     Air_Canvas(True)
                     cap=cv2.VideoCapture(0)
                     
-                    
 
         #Frame Rate
         c_time=time.time()

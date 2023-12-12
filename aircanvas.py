@@ -63,8 +63,13 @@ def Air_Canvas(acquire=False):
     #Declaring HandDetector Object
     detector=HandDetector(detectionCon=0.85)
     # Removing output directory and creating new for cleaning previous saves of img
-    shutil.rmtree("output")
-    os.makedirs("output")
+    if os.path.exists("output"):
+        shutil.rmtree("output")
+        os.makedirs("output")
+    else:
+        os.makedirs("output")
+    if not os.path.exists("notes"):
+        os.makedirs("notes")
     # Constantly Capturing Frames
     while acquire:
         #Reading Frames
@@ -240,3 +245,6 @@ def Air_Canvas(acquire=False):
             break
 
     cv2.destroyWindow("Canvas")
+
+if __name__=="__main__":
+    Air_Canvas(True)

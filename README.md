@@ -26,6 +26,16 @@ There are three options in it which is informed by left hand while we control th
 
 3. Power Control: It is to be done carefully as it leads to shutdown your PC and is signified by 3.
 
+## Using Virtual Keyboard
+
+1. Use Index Finger To select or hover on keys
+
+2. If the distance between the index and middle finger is less than key is clicked
+
+3. If keys like Shift, Alt, Ctrl are pressed then after that if any key is pressed. It will be pressed with them together.
+
+4. Four finger shown by hand will initiate the Key Up for shift, alt, ctrl. 
+
 ## Moving in GCCS System
 
 1. No finger up by left and right hand signify exit from that module

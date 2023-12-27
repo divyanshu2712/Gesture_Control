@@ -1,7 +1,0 @@
-Instructions:
-
-This GCCS Software will help you do various things and here are some instructions to how to use it:
-1. 4 by left hand and 1 by right hand will signify that you want to use Utility functions which includes sound and brightness control and shutdown your computer.
-2. 4 by left hand and 2 by right hand will signify that you want to use a Mouse
-3. 4 by left hand and 3 by right hand will signify that you want to use a Air Canvas
-4. 2 by left hand and 4 by right hand will signify that you want to use a Virtual Keyboard

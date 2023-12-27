@@ -1,8 +1,15 @@
 comtypes==1.2.0
-mediapipe==0.10.5
+img2pdf==0.5.1
+imutils==0.5.4
+joblib==1.2.0
 numpy==1.23.3
 opencv_contrib_python==4.8.0.76
 opencv_python==4.8.0.76
+Pillow==10.1.0
+plyer==2.1.0
 PyAutoGUI==0.9.54
 pycaw==20230407
+pywin32==304
 screen_brightness_control==0.22.0
+mediapipe==0.10.5
+PyQt5

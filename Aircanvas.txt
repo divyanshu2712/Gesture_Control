@@ -1,4 +1,0 @@
-It will have
-* New page function
-* can change thickness of image
-* can get pdf of the pages
